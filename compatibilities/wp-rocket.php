@@ -42,6 +42,10 @@ class Brizy_Compatibilities_WpRocket {
 	 * covers both Brizy's external bundles (by src) and its inline init scripts
 	 * (by their wp_add_inline_script id: brizy-preview, brizy-asset-*).
 	 *
+	 * Brizy's bundles use jQuery ($), so once they are excluded from delay they
+	 * run at parse time - jQuery must be excluded too or they hit "$ is not
+	 * defined" and the group-all/preview modules fail to register.
+	 *
 	 * @param array $excluded
 	 *
 	 * @return array
@@ -52,6 +56,8 @@ class Brizy_Compatibilities_WpRocket {
 			'/wp-content/plugins/brizy-pro/public/',
 			'id=.brizy-',
 			'__CONFIG__',
+			'/wp-includes/js/jquery/jquery.min.js',
+			'/wp-includes/js/jquery/jquery-migrate.min.js',
 		] );
 	}
 
