@@ -46,6 +46,10 @@ register_activation_hook( BRIZY_FILE, 'brizy_install' );
 register_deactivation_hook( BRIZY_FILE, 'brizy_clean' );
 function brizy_load() {
 
+	// registered before the editor bootstrap so that the meta keys stay
+	// protected even if Brizy_Editor::get() throws and the plugin degrades
+	Brizy_Editor_PostMetaProtection::_init();
+
 	try {
 		$instance = Brizy_Editor::get();
 	} catch ( Exception $e ) {

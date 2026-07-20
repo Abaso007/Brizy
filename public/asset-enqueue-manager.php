@@ -326,7 +326,7 @@ class Brizy_Public_AssetEnqueueManager
         $attrs = $asset->getAttrs();
 
         return array_reduce(array_keys($attrs), function ($attrString, $key) use ($attrs) {
-            return $attrString . " {$key}=\"{$attrs[$key]}\"";
+            return $attrString . ' ' . esc_attr($key) . '="' . esc_attr($attrs[$key]) . '"';
         }, '');
     }
 
