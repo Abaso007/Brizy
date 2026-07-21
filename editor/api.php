@@ -1018,12 +1018,15 @@ class Brizy_Editor_API extends Brizy_Admin_AbstractApi
     public function setTemplateType()
     {
         try {
-
             $this->verifyAuthorization(self::nonce);
-            $templateId = $this->param('template_id');
+            $templateId = (int)$this->param('template_id');
             $templateType = $this->param('template_type');
             if (get_post_type($templateId) != Brizy_Admin_Templates::CP_TEMPLATE) {
                 $this->error(400, 'Invalid template');
+            }
+            $templatePostType = get_post_type_object(Brizy_Admin_Templates::CP_TEMPLATE);
+            if (!current_user_can($templatePostType->cap->edit_posts)) {
+                $this->error(403, 'Unauthorized template save.');
             }
             $allowedTypes = [
                 Brizy_Admin_Templates::TYPE_SINGLE,
