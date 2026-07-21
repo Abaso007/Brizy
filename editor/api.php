@@ -68,7 +68,7 @@ class Brizy_Editor_API extends Brizy_Admin_AbstractApi
 
     protected function initializeApiActions()
     {
-        $n = 'wp_ajax_nopriv_'.Brizy_Editor::prefix();
+        $n = 'wp_ajax_nopriv_' . Brizy_Editor::prefix();
         add_action($n . self::AJAX_HEARTBEAT, array($this, 'heartbeat'));
 
         if (!Brizy_Editor_User::is_user_allowed()) {
@@ -244,14 +244,13 @@ class Brizy_Editor_API extends Brizy_Admin_AbstractApi
             $this->error(400, 'Bad request');
         }
         if ($this->post && $this->post->uses_editor()) {
-
             update_post_meta($this->post->getWpPostId(), 'brizy_attachment_focal_point', Brizy_Editor_FocalPoint::sanitize(array(
                 'x' => $_REQUEST['pointX'],
                 'y' => $_REQUEST['pointY'],
             )));
             $this->success(array());
         }
-        $this->error(400, 'Invalid post');
+        $this->error(400, 'Bad request');
     }
 
     public function remove_featured_image()
