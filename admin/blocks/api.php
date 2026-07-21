@@ -296,7 +296,7 @@ class Brizy_Admin_Blocks_Api extends Brizy_Admin_AbstractApi {
 			}
 
 			if ( $compiledData ) {
-				$this->set_compiler( Brizy_Editor_Post::COMPILER_EXTERNAL );
+				$block->set_compiler( Brizy_Editor_Post::COMPILER_EXTERNAL );
 				$compiled_sections = json_decode( $compiledData, true );
 				if ( ! $compiled_sections ) {
 					$this->error( 400, "The compiled data is invalid" );
