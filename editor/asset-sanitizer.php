@@ -77,9 +77,10 @@ class Brizy_Editor_AssetSanitizer {
 				}
 
 				if ( $slot === 'main' ) {
-					// a group without a main asset is discarded by the aggregator, so it is
-					// sanitized in place and never dropped
-					$group[ $slot ] = $this->sanitizeAsset( $group[ $slot ], $isStyleGroup );
+					// a group without a main asset is discarded by the aggregator and
+					// Asset::instanceFromJsonData() rejects a null, so an unsafe main is
+					// emptied in place and never dropped
+					$group[ $slot ] = $this->sanitizeAsset( $group[ $slot ], $isStyleGroup, true );
 					continue;
 				}
 
@@ -105,10 +106,11 @@ class Brizy_Editor_AssetSanitizer {
 	/**
 	 * @param array $asset
 	 * @param bool $isStyleGroup
+	 * @param bool $keep When the caller cannot accept a null, the asset is emptied instead of dropped.
 	 *
 	 * @return array|null Null when the asset must be dropped.
 	 */
-	private function sanitizeAsset( $asset, $isStyleGroup ) {
+	private function sanitizeAsset( $asset, $isStyleGroup, $keep = false ) {
 
 		if ( ! is_array( $asset ) ) {
 			return null;
@@ -146,7 +148,7 @@ class Brizy_Editor_AssetSanitizer {
 			case self::TYPE_INLINE:
 				// inline content of a script group is javascript and cannot be filtered
 				if ( ! $isStyleGroup ) {
-					return null;
+					return $keep ? $this->emptyContent( $asset ) : null;
 				}
 				if ( isset( $asset['content']['content'] ) ) {
 					$asset['content']['content'] = $this->sanitizeCss( $asset['content']['content'] );
@@ -157,11 +159,33 @@ class Brizy_Editor_AssetSanitizer {
 				if ( isset( $asset['content']['url'] ) ) {
 					$url = esc_url_raw( (string) $asset['content']['url'], array( 'http', 'https' ) );
 					if ( $url === '' && (string) $asset['content']['url'] !== '' ) {
-						return null;
+						return $keep ? $this->emptyContent( $asset ) : null;
 					}
 					$asset['content']['url'] = $url;
 				}
 				break;
+		}
+
+		return $asset;
+	}
+
+	/**
+	 * Empties the payload of an asset that cannot be dropped. The key set is left
+	 * alone because Asset::instanceFromJsonData() rejects both unknown and missing
+	 * keys, so a rebuilt asset would throw where the original does not.
+	 *
+	 * @param array $asset
+	 *
+	 * @return array
+	 */
+	private function emptyContent( $asset ) {
+
+		if ( array_key_exists( 'content', $asset['content'] ) ) {
+			$asset['content']['content'] = '';
+		}
+
+		if ( array_key_exists( 'url', $asset['content'] ) ) {
+			$asset['content']['url'] = '';
 		}
 
 		return $asset;
