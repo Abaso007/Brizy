@@ -245,10 +245,10 @@ class Brizy_Editor_API extends Brizy_Admin_AbstractApi
         }
         if ($this->post && $this->post->uses_editor()) {
 
-            update_post_meta($this->post->getWpPostId(), 'brizy_attachment_focal_point', array(
+            update_post_meta($this->post->getWpPostId(), 'brizy_attachment_focal_point', Brizy_Editor_FocalPoint::sanitize(array(
                 'x' => $_REQUEST['pointX'],
                 'y' => $_REQUEST['pointY'],
-            ));
+            )));
             $this->success(array());
         }
         $this->error(400, 'Invalid post');
