@@ -2,9 +2,9 @@
 
 Contributors: themefuse<br>
 Requires at least: 4.5<br>
-Tested up to: 7.0.2<br>
+Tested up to: 7.1<br>
 Requires PHP: 7.4<br>
-Stable tag: 2.8.21<br>
+Stable tag: 2.8.22<br>
 License: GPLv3<br>
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -135,6 +135,9 @@ $bodyHtml = apply_filters( 'brizy_content', $html->get_body(), Brizy_Editor_Proj
 [Privacy policy](https://brizy.io/privacy/)
 
 ## Changelog
+
+### 2.8.22 - 2026-08-24
+*Fixed: preserve percent-encoded values in popup attributes
 
 ### 2.8.21 - 2026-07-28
 * Fixed: asset paths for subfolder envs
