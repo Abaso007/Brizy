@@ -140,6 +140,7 @@ $bodyHtml = apply_filters( 'brizy_content', $html->get_body(), Brizy_Editor_Proj
 * Fixed: asset paths for subfolder envs
 
 ### 2.8.20 - 2026-07-24
+* New: Added dynamic content for Embed Code element
 * Fixed: onLoad attribute cleanup
 
 
